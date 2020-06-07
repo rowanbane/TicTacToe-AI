@@ -12,9 +12,11 @@ export default class TicTacToe extends PIXI.Container {
 
     private _winText: PIXI.Text;
 
-    private _AISelection: EAITypes = EAITypes.Random;
+    private _AISelection: EAITypes = EAITypes.MinMax;
 
     private _turnPromiseResolver: (v: GameTile) => void;
+
+    private _turnIndex: number = 0;
 
     public constructor() {
         super();
@@ -90,6 +92,7 @@ export default class TicTacToe extends PIXI.Container {
             this.playerTurn = !this.playerTurn;
 
             // Start next turn:
+            this._turnIndex++;
             this.handleTurn();
         }
     }
@@ -196,7 +199,9 @@ export default class TicTacToe extends PIXI.Container {
 
         tileSelection = AIManager.getNextMove(
             this._arr_gameBoard,
-            this._AISelection
+            this._AISelection,
+            2,
+            this._turnIndex > 1
         );
 
         this.enableAllSelectable();
