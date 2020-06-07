@@ -44,7 +44,7 @@ export default class GameTile extends PIXI.Container {
 
         console.log("pressed");
 
-        this._gameScene.handleTurn(this);
+        this._gameScene.onTileSelected(this);
     }
 
     public handleToken(tokenToBePlaced: number): void {
