@@ -65,7 +65,7 @@ export default class TicTacToe extends PIXI.Container {
                     this._arr_gameBoard[i].tokenPlaced
             ) {
                 //win logic
-                this.winGame();
+                this.winGame(true);
             }
         }
 
@@ -80,7 +80,7 @@ export default class TicTacToe extends PIXI.Container {
                     this._arr_gameBoard[y].tokenPlaced
             ) {
                 //win logic
-                this.winGame();
+                this.winGame(true);
             }
         }
 
@@ -94,7 +94,7 @@ export default class TicTacToe extends PIXI.Container {
                 this._arr_gameBoard[8].tokenPlaced
         ) {
             //win logic
-            this.winGame();
+            this.winGame(true);
         }
 
         if (
@@ -105,7 +105,7 @@ export default class TicTacToe extends PIXI.Container {
                 this._arr_gameBoard[6].tokenPlaced
         ) {
             //win logic
-            this.winGame();
+            this.winGame(true);
         }
 
         let count = 0;
@@ -117,11 +117,16 @@ export default class TicTacToe extends PIXI.Container {
 
         if (count === this._arr_gameBoard.length) {
             //Draw Logic
+            this.winGame(false);
         }
     }
 
-    public winGame(): void {
-        this._winText = new PIXI.Text("Game won! Refresh to play again");
+    public winGame(hasWon: boolean): void {
+        if (hasWon) {
+            this._winText = new PIXI.Text("Game won! Refresh to play again");
+        } else {
+            this._winText = new PIXI.Text("Game Drew! Refresh to play again");
+        }
         this._winText.x = 550;
         this._winText.y = 100;
         this._winText.anchor.set(0.5);
