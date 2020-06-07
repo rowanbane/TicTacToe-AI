@@ -2,7 +2,7 @@ import GameTile from "./GameTile";
 import { AIManager, EAITypes } from "../AI/AIManager";
 
 export default class TicTacToe extends PIXI.Container {
-    public currentTurnToken: number = 1;
+    public currentTurnToken: number = 1; //1 is X, 2 is O and 0 is nothing
 
     public playerTurn: boolean = true;
 

@@ -48,6 +48,7 @@ export default class GameTile extends PIXI.Container {
     }
 
     public handleToken(tokenToBePlaced: number): void {
+        this.disable();
         this.tokenPlaced = tokenToBePlaced;
 
         switch (tokenToBePlaced) {
