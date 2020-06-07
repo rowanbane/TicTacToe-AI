@@ -1,7 +1,13 @@
 import GameTile from "./GameTile";
 
 export default class TicTacToe extends PIXI.Container {
+    public currentTurnToken: number = 1;
+
     private _arr_gameBoard: GameTile[] = [];
+
+    private gameWon: boolean = false;
+
+    private _winText: PIXI.Text;
 
     public constructor() {
         super();
@@ -21,13 +27,31 @@ export default class TicTacToe extends PIXI.Container {
             }
 
             this._arr_gameBoard.push(
-                new GameTile((i % 3) * xOffset + xOffset, yRow * yOffset)
+                new GameTile((i % 3) * xOffset + xOffset, yRow * yOffset, this)
             );
         }
 
         this._arr_gameBoard.forEach((element) => {
             this.addChild(element);
         });
+    }
+
+    public handleTurn(gameTile: GameTile): void {
+        console.log(this.currentTurnToken);
+        gameTile.handleToken(this.currentTurnToken);
+
+        if (this.currentTurnToken === 1) {
+            this.currentTurnToken = 2;
+            console.log(this.currentTurnToken);
+        } else if (this.currentTurnToken === 2) {
+            this.currentTurnToken = 1;
+        }
+
+        this.checkWinners();
+
+        if (!this.gameWon) {
+            //pass turn
+        }
     }
 
     public checkWinners(): void {
@@ -41,6 +65,7 @@ export default class TicTacToe extends PIXI.Container {
                     this._arr_gameBoard[i].tokenPlaced
             ) {
                 //win logic
+                this.winGame();
             }
         }
 
@@ -55,6 +80,7 @@ export default class TicTacToe extends PIXI.Container {
                     this._arr_gameBoard[y].tokenPlaced
             ) {
                 //win logic
+                this.winGame();
             }
         }
 
@@ -68,16 +94,18 @@ export default class TicTacToe extends PIXI.Container {
                 this._arr_gameBoard[8].tokenPlaced
         ) {
             //win logic
+            this.winGame();
         }
 
         if (
             this._arr_gameBoard[2].tokenPlaced !== 0 &&
             this._arr_gameBoard[4].tokenPlaced ===
-                this._arr_gameBoard[0].tokenPlaced &&
+                this._arr_gameBoard[2].tokenPlaced &&
             this._arr_gameBoard[2].tokenPlaced ===
                 this._arr_gameBoard[6].tokenPlaced
         ) {
             //win logic
+            this.winGame();
         }
 
         let count = 0;
@@ -90,5 +118,13 @@ export default class TicTacToe extends PIXI.Container {
         if (count === this._arr_gameBoard.length) {
             //Draw Logic
         }
+    }
+
+    public winGame(): void {
+        this._winText = new PIXI.Text("Game won! Refresh to play again");
+        this._winText.x = 550;
+        this._winText.y = 100;
+        this._winText.anchor.set(0.5);
+        this.addChild(this._winText);
     }
 }

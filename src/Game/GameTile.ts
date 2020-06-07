@@ -1,3 +1,5 @@
+import TicTacToe from "./TicTacToe";
+
 export default class GameTile extends PIXI.Container {
     public tokenPlaced: number = 0;
 
@@ -5,16 +7,18 @@ export default class GameTile extends PIXI.Container {
 
     private _txt_token: PIXI.Text;
 
-    public constructor(x: number, y: number) {
+    private _gameScene: TicTacToe;
+
+    public constructor(x: number, y: number, scene: TicTacToe) {
         super();
         this.x = x;
         this.y = y;
+        this._gameScene = scene;
         this.create();
     }
 
     public create(): void {
         this._spr_tile = new PIXI.Graphics();
-        // this._spr_tile.beginFill(0xff0000);
         this._spr_tile.beginFill(0xffffff);
         this._spr_tile.drawRect(0, 0, 100, 100);
         this.addChild(this._spr_tile);
@@ -23,27 +27,37 @@ export default class GameTile extends PIXI.Container {
     }
 
     public enable(): void {
-        this._spr_tile.buttonMode = true;
+        this.buttonMode = true;
 
-        this._spr_tile.interactive = true;
+        this.interactive = true;
 
-        // this._spr_tile.cursor = "button";
-
-        this._spr_tile
-            .on("mousedown", this.onPointerDown)
-            .on("touchstart", this.onPointerDown);
+        this.on("mousedown", this.onPointerDown);
+        //.on("touchstart", this.onPointerDown);
     }
 
     private onPointerDown(): void {
         this.interactive = false;
         console.log("pressed");
-        this._txt_token = new PIXI.Text("X");
+
+        this._gameScene.handleTurn(this);
+    }
+
+    public handleToken(tokenToBePlaced: number): void {
+        this.tokenPlaced = tokenToBePlaced;
+
+        switch (tokenToBePlaced) {
+            case 1:
+                this._txt_token = new PIXI.Text("X");
+                break;
+
+            case 2:
+                this._txt_token = new PIXI.Text("O");
+                break;
+        }
+
         this._txt_token.x = 50;
         this._txt_token.y = 50;
         this._txt_token.anchor.set(0.5);
         this.addChild(this._txt_token);
-        this.handleToken();
     }
-
-    private handleToken(): void {}
 }
