@@ -3,6 +3,8 @@ import GameTile from "./GameTile";
 export default class TicTacToe extends PIXI.Container {
     public currentTurnToken: number = 1;
 
+    public playerTurn: boolean = true;
+
     private _arr_gameBoard: GameTile[] = [];
 
     private gameWon: boolean = false;
@@ -115,21 +117,32 @@ export default class TicTacToe extends PIXI.Container {
             }
         });
 
-        if (count === this._arr_gameBoard.length) {
+        if (count === this._arr_gameBoard.length && !this.gameWon) {
             //Draw Logic
             this.winGame(false);
         }
     }
 
     public winGame(hasWon: boolean): void {
+        this.gameWon = true;
+
         if (hasWon) {
-            this._winText = new PIXI.Text("Game won! Refresh to play again");
+            this._winText = new PIXI.Text("Game won! Click to play again");
         } else {
-            this._winText = new PIXI.Text("Game Drew! Refresh to play again");
+            this._winText = new PIXI.Text("Game Drew! Click to play again");
         }
+
+        this._arr_gameBoard.forEach((element) => {
+            element.disable();
+        });
+
         this._winText.x = 550;
         this._winText.y = 100;
         this._winText.anchor.set(0.5);
         this.addChild(this._winText);
+        this._winText.interactive = true;
+        this._winText.on("pointerdown", () => {
+            window.location.reload();
+        });
     }
 }

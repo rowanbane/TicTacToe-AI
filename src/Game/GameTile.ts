@@ -35,8 +35,13 @@ export default class GameTile extends PIXI.Container {
         //.on("touchstart", this.onPointerDown);
     }
 
-    private onPointerDown(): void {
+    public disable(): void {
         this.interactive = false;
+    }
+
+    private onPointerDown(): void {
+        this.disable();
+
         console.log("pressed");
 
         this._gameScene.handleTurn(this);
